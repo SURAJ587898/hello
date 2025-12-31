@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year, Chinmayee</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@300;400;600&family=Playfair+Display:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+            color: #fff;
+            overflow-x: hidden;
+        }
+        .cursive {
+            font-family: 'Dancing Script', cursive;
+        }
+        .serif {
+            font-family: 'Playfair Display', serif;
+        }
+        .gold-text {
+            background: linear-gradient(to right, #bf953f, #fcf6ba, #b38728, #fcf6ba, #aa771c);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .firework {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            border-radius: 50%;
+            pointer-events: none;
+        }
+        @keyframes explosion {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(40); opacity: 0; }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* Love Frame Styling */
+        .love-frame {
+            background: white;
+            padding: 12px 12px 40px 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: rotate(-2deg);
+            transition: all 0.5s ease;
+            position: relative;
+        }
+        .love-frame:hover {
+            transform: rotate(0deg) scale(1.05);
+            box-shadow: 0 15px 40px rgba(244, 114, 182, 0.3);
+        }
+        .love-frame::after {
+            content: '❤';
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: #f472b6;
+            font-size: 1.5rem;
+        }
+
+        /* Heart Clip for Greeting Card */
+        .heart-photo {
+            clip-path: path('M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z');
+        }
+
+        .heart-mask {
+            width: 180px;
+            height: 180px;
+            background-color: #f472b6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 5px;
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center;
+        }
+
+        .card-container {
+            perspective: 1000px;
+            width: 350px;
+            height: 500px;
+            cursor: pointer;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+        .card-container.is-flipped .card-inner {
+            transform: rotateY(180deg);
+        }
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            border: 2px solid rgba(191, 149, 63, 0.3);
+        }
+        .card-front {
+            background: linear-gradient(135deg, #2a2a4a 0%, #1a1a2e 100%);
+        }
+        .card-back {
+            background: #fff;
+            color: #1a1a2e;
+            transform: rotateY(180deg);
+        }
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            top: -10px;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex flex-col items-center justify-center text-center px-4 overflow-hidden">
+        <div id="fireworks-container" class="absolute inset-0"></div>
+
+        <div class="z-10 animate-float">
+            <h2 class="text-2xl md:text-3xl text-gray-300 mb-2 font-light">Happy New Year</h2>
+            <h1 class="text-6xl md:text-9xl gold-text font-bold mb-4 serif">Chinmayee</h1>
+            <p class="cursive text-3xl md:text-5xl text-pink-400 mt-4 drop-shadow-lg">You are my 2026 miracle.</p>
+        </div>
+
+        <button onclick="scrollToContent()" class="mt-16 z-10 bg-white/10 backdrop-blur-md border border-white/30 px-10 py-4 rounded-full hover:bg-white/20 transition-all cursor-pointer group">
+            <span class="group-hover:scale-110 inline-block transition-transform">Explore Your Surprise ↓</span>
+        </button>
+    </header>
+
+    <!-- Content Section -->
+    <main id="main-content" class="max-w-6xl mx-auto py-20 px-6 opacity-0 translate-y-10 transition-all duration-1000">
+
+        <!-- Personal Message -->
+        <section class="text-center mb-32">
+            <div class="inline-block p-1 rounded-full bg-gradient-to-r from-pink-500 to-[#b38728] mb-6">
+                <div class="bg-gray-900 rounded-full px-8 py-2 text-sm uppercase tracking-[0.3em] text-pink-400 font-bold">For Chinmayee</div>
+            </div>
+            <h3 class="text-5xl font-bold mb-8 serif italic text-pink-100">Dearest Chinmayee,</h3>
+            <p class="text-xl md:text-2xl text-gray-300 leading-relaxed max-w-3xl mx-auto font-light italic">
+                "Every year has its magic, but 2025 was special because it had you in it. As we step into 2026, I promise to be the reason behind your beautiful smile every single day."
+            </p>
+        </section>
+
+        <!-- Photo Gallery in Love Frames -->
+        <section class="mb-32">
+            <h4 class="text-center text-2xl gold-text mb-16 uppercase tracking-widest font-bold">Captured in Love</h4>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 px-4">
+                <!-- Photo 1 -->
+                <div class="love-frame" style="transform: rotate(-3deg);">
+                    <img src="image1.png"
+                         alt="Chinmayee 1" class="w-full aspect-[4/5] object-cover mb-2"
+                         onerror="this.src='https://via.placeholder.com/600x800?text=Chinmayee+Photo+1'">
+                    <p class="text-center text-gray-800 cursive text-xl">So Radiant</p>
+                </div>
+
+                <!-- Photo 2 -->
+                <div class="love-frame" style="transform: rotate(4deg);">
+                    <img src="image2.png"
+                         alt="Chinmayee 2" class="w-full aspect-[4/5] object-cover mb-2"
+                         onerror="this.src='https://via.placeholder.com/600x800?text=Chinmayee+Photo+2'">
+                    <p class="text-center text-gray-800 cursive text-xl">Breathtaking</p>
+                </div>
+
+                <!-- Photo 3 -->
+                <div class="love-frame" style="transform: rotate(-2deg);">
+                    <img src="image3.png"
+                         alt="Chinmayee 3" class="w-full aspect-[4/5] object-cover mb-2"
+                         onerror="this.src='https://via.placeholder.com/600x800?text=Chinmayee+Photo+3'">
+                    <p class="text-center text-gray-800 cursive text-xl">Pure Joy</p>
+                </div>
+
+                <!-- Photo 4 -->
+                <div class="love-frame" style="transform: rotate(3deg);">
+                    <img src="image4.png"
+                         alt="Chinmayee 4" class="w-full aspect-[4/5] object-cover mb-2"
+                         onerror="this.src='https://via.placeholder.com/600x800?text=Chinmayee+Photo+4'">
+                    <p class="text-center text-gray-800 cursive text-xl">Forever You</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final Greeting Card with Love Frame -->
+        <section class="flex flex-col items-center justify-center pb-32">
+            <h2 class="text-4xl font-bold mb-12 gold-text serif">Your Special Wish</h2>
+
+            <div class="card-container" id="giftCard" onclick="flipCard()">
+                <div class="card-inner" id="cardInner">
+                    <!-- Front of Card -->
+                    <div class="card-front">
+                        <div class="mb-6 text-pink-500 animate-pulse">
+                            <svg width="120" height="120" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                            </svg>
+                        </div>
+                        <h3 class="cursive text-3xl gold-text text-center">Open Your Love Card</h3>
+                        <p class="mt-4 text-sm text-gray-400 uppercase tracking-[0.2em]">Designed for Chinmayee</p>
+                    </div>
+
+                    <!-- Back of Card (Heart-Shaped Reveal) -->
+                    <div class="card-back overflow-hidden relative">
+                        <div class="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/heart-eyes.png')]"></div>
+
+                        <!-- Heart Framed Photo -->
+                        <div class="heart-mask mb-6">
+                            <img src="image1.png"
+                                 class="w-full h-full object-cover"
+                                 alt="Chinmayee Heart Photo"
+                                 onerror="this.src='https://via.placeholder.com/200?text=Chinmayee'">
+                        </div>
+
+                        <h4 class="serif text-3xl font-bold mb-2 text-pink-600">Happy 2026!</h4>
+                        <p class="cursive text-xl text-gray-700 mb-6 px-4">"You are the best thing that ever happened to me."</p>
+
+                        <div class="w-full border-t border-gray-100 pt-6 text-center">
+                            <p class="text-sm font-semibold text-gray-500 uppercase tracking-widest leading-loose">
+                                Love you to the moon<br>& back, Chinmayee. ❤️
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <p id="hintText" class="mt-8 text-gray-400 animate-bounce text-lg">Click the heart to reveal...</p>
+        </section>
+    </main>
+
+    <footer class="text-center py-10 border-t border-white/10 text-gray-500 text-sm">
+        For Chinmayee • 2026 • Infinite Love
+    </footer>
+
+    <script>
+        // Smooth scroll
+        function scrollToContent() {
+            const content = document.getElementById('main-content');
+            content.classList.remove('opacity-0', 'translate-y-10');
+            content.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // Firework effect
+        function createFirework() {
+            const container = document.getElementById('fireworks-container');
+            if (!container) return;
+
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+
+            const x = Math.random() * window.innerWidth;
+            const y = Math.random() * window.innerHeight;
+            const color = `hsl(${Math.random() * 360}, 100%, 75%)`;
+
+            firework.style.left = x + 'px';
+            firework.style.top = y + 'px';
+            firework.style.backgroundColor = color;
+            firework.style.boxShadow = `0 0 15px ${color}, 0 0 30px ${color}`;
+            firework.style.animation = 'explosion 2s ease-out forwards';
+
+            container.appendChild(firework);
+            setTimeout(() => firework.remove(), 2000);
+        }
+
+        setInterval(createFirework, 700);
+
+        // Card Flip & Confetti
+        let flipped = false;
+        function flipCard() {
+            const card = document.getElementById('giftCard');
+            const hint = document.getElementById('hintText');
+            card.classList.toggle('is-flipped');
+            flipped = !flipped;
+
+            if (flipped) {
+                hint.innerText = "❤️ Our Year ❤️";
+                triggerConfetti();
+            } else {
+                hint.innerText = "Click to open!";
+            }
+        }
+
+        function triggerConfetti() {
+            const colors = ['#f472b6', '#ff726f', '#ffffff', '#bf953f'];
+            for (let i = 0; i < 150; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+
+                document.body.appendChild(confetti);
+
+                const animation = confetti.animate([
+                    { transform: `translate3d(0,0,0) rotate(0deg)`, opacity: 1 },
+                    { transform: `translate3d(${Math.random() * 200 - 100}px, ${window.innerHeight}px, 0) rotate(${Math.random() * 1000}deg)`, opacity: 0 }
+                ], {
+                    duration: Math.random() * 3000 + 2500,
+                    easing: 'cubic-bezier(0.1, 0.8, 0.3, 1)'
+                });
+
+                animation.onfinish = () => confetti.remove();
+            }
+        }
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        window.onload = () => {
+            const mainContent = document.getElementById('main-content');
+            observer.observe(mainContent);
+        };
+    </script>
+</body>
+</html>
